@@ -1,0 +1,21 @@
+name: Verify path roots on Windows
+on:
+  push:
+    branches: [codex/verify-path-roots-windows]
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Install locked test and typing dependencies
+        run: python -m pip install -e . prompt_toolkit==3.0.48 pytest==9.0.3 mypy==2.1.0
+      - name: Run full tests
+        run: python -m pytest -q
+      - name: Check types
+        run: python -m mypy questionary
